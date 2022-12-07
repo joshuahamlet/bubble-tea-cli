@@ -62,13 +62,13 @@ func (m model) View() string {
 	var s string
 
 	head := lipgloss.NewStyle().
-    Width(50).
-    Padding(1,0,1,2).
+		Width(52).
+		Padding(1, 0, 1, 2).
 		SetString("What should we buy at the market?").
 		Background(lipgloss.Color("#FAFAFA")).
 		Foreground(lipgloss.Color("#7D56F4")).String()
 
-  head += lipgloss.NewStyle().SetString("\n").String()
+	head += lipgloss.NewStyle().SetString("\n").String()
 
 	// Iterate over our choices
 	for i, choice := range m.choices {
@@ -84,44 +84,48 @@ func (m model) View() string {
 		if _, ok := m.selected[i]; ok {
 			checked = "x" // selected!
 		}
-    
-    top := 0
-    right := 0
-    bottom := 0
-    left := 3
 
-    if i == len(m.choices) - 1 {
-      bottom = 1
-    }
-    
-    if i == 0 {
-      top = 1
-    }
+		top := 0
+		right := 0
+		bottom := 0
+		left := 3
+
+		if i == len(m.choices)-1 {
+			bottom = 1
+		}
+
+		if i == 0 {
+			top = 1
+		}
 
 		// Render the row
 		s += lipgloss.NewStyle().
-      Width(50).
+			Width(50).
 			SetString(fmt.Sprintf("%s [%s] %s", cursor, checked, choice)).
 			Foreground(lipgloss.Color("#FAFAFA")).
 			Background(lipgloss.Color("#7D56F4")).
-      Padding(top,right,bottom,left).
+			Padding(top, right, bottom, left).
 			String()
 
-    s += lipgloss.NewStyle().SetString("\n").String()
+		if i != len(m.choices)-1 {
+			s += lipgloss.NewStyle().SetString("\n").String()
+		}
 	}
 
+	body := lipgloss.NewStyle().SetString(s).BorderStyle(lipgloss.RoundedBorder()).String()
+	body += lipgloss.NewStyle().SetString("\n").String()
 	// The footer
 	foot := lipgloss.NewStyle().
-  Width(50).
+		Width(52).
 		Foreground(lipgloss.Color("#7D56F4")).
 		Background(lipgloss.Color("#04B550")).
-    Padding(1,0,1,2).
+		Padding(1, 0, 1, 2).
 		SetString("Press q to quit.").
 		String()
 
 	// Send the UI for rendering
 
-	return fmt.Sprintf("%s%s%s", head, s, foot)
+	return fmt.Sprintf("%s%s%s", head, body, foot)
 }
 
 func main() {
